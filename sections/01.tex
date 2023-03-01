@@ -1,0 +1,207 @@
+
+\section{6. The polynomial method for Orthogonal Vectors}
+
+\begin{thm}[Abboud, Williams, Yu, 2015]
+	Let $ c = c(c)$, consider OV with $d = c \log(n)$, OV can be solved in time $O(n^{2 - \frac{1}{O(\log c)}})$.
+\end{thm}
+
+\begin{prop*}
+	if $d \leq 100 \log n$, then OV $\in$ TIME$[n^{2-\varepsilon}]$ for some $\varepsilon > 0$
+\end{prop*}
+
+\begin{proof}
+	Plan:
+	\begin{itemize}
+		\item Treat OV as a Boolean function of the folowing form: $A, B \subseteq \{0, 1\}^d, |A| = |B| = n$.
+			$OV : \{0, 1\}^{2nd} \to \{0, 1\}$.
+			$OV(A, B) = 1 \Longleftrightarrow (A, B)$ is a yes instance ($\exists a \in A, b \in B : a \cdot b = 0$).
+
+		\item Represent OV as a probabilistic polynomial with a few monomials.
+		\item Show that we can quickly evaluate this polynomial
+	\end{itemize}
+
+	Let's start from a second point.
+
+	\begin{remrk}
+		Assume that we have $p(x_1, \dots, x_n) \in F_2[x_1, \dots, x_n]$ - multilineal, because in every monomial, each variable has degree at most one. Because $x^2 = x \mod 2$
+	\end{remrk}
+
+	\begin{exmpl}
+		$x_1 x_2 \oplus x_1 x_2 x_3 \oplus x_4 x_2 \oplus 1$
+	\end{exmpl}
+
+	\begin{lm}
+		Consider $p(x_1, \dots, x_{2k})$ over $F_2$ with $m$ monomials.
+
+		Assume $A_1, \dots, A_g$ and $B_1, \dots, B_g \in F_2^k$.
+		If $k, m = O(g^{\frac{1}{10}})$ then one can evaluate $P(A_i, B_j) \ \forall 1 \leq i, j \leq g$ in time $O(g^2 \log^2g)$ = $\widetilde{O}(g^2)$
+	\end{lm}
+
+	\begin{proof}
+		Naive algorithm: $O(g^2 \cdot m \cdot k)$
+
+		\begin{remrk*}
+			Resembles FFT: you can evaluate a polynomial $P$ of degree $n$ in $n$ points $A_1, \dots, A_n$ in time $O(n \log n)$ if $A_1, \dots, A_n$ are selected carefully(roots of unity)
+		\end{remrk*}
+
+		Proof of the lemma:
+
+		Black box:
+		\begin{thm}[Coopersmith, 198?]
+			Let $A \in F^{n \times m}$ and $B \in F^{n \times m}$.
+
+			If $m = O(n^{\frac{1}{10}})$ then one can compute $A \times B$ in time $O(n^2 \log ^{O(1)} n)$
+
+			Naively: $O(n \cdot m \cdot n) = O(n^{2.1})$
+		\end{thm}
+
+		We will use that black box without proof.
+
+		Assume $p(x_1, \dots x_{2k}) = \bigoplus_{i \in [m]} x_1^{\alpha_{i_1}} \cdot x_2^{\alpha_{i_2}} \dots \cdot x_{2k}^{\alpha_{i_{2k}}}$ and $\alpha_{i j} \in {0, 1}$
+
+		{\color{red} Рисуночек с точками}
+
+		$A_i \in F^k, A_i = (A_{i 1}, \dots, A_{i k})$
+		\[
+			p(A_i, B_j) = \bigoplus_{l \in [m]} A_{i 1}^{\alpha_{l 1}} \cdot \dots \cdot A_{i k}^{\alpha_{l k}} \cdot B_{j 1}^{\alpha_{l k + 1} } \dots \cdot B_{j k}^{\alpha_{l 2k}}
+		\]
+		{\color{red} а сюда рисунок}
+
+		We contruct matrix $\A, \B$ such that $\A[i, l] = A_{i 1}^{\alpha_{l 1}} \cdot \dots \cdot A_{i k}^{\alpha_{l k}}$ and similar for $\B[l, j] = B_{j 1}^{\alpha_{l k + 1}} \cdot \dots \cdot B_{j k}^{\alpha_{l 2k}}$
+
+		Now $P(A_i, B_j) = (\A \times \B)[i, j]$. Because $m = O(g^{\frac{1}{10}})$ it means that we can use our black box and proof will be finished.
+	\end{proof}
+
+	Now we will represent OV as a Boolean function.
+
+	OV: $\{0, 1\}^{2nd} \to \{0, 1\}$(OV$(A, B) = 1 \Leftrightarrow \exists a \in A, b \in B : a \cdot b = 0 )$
+
+	$|A| = |B| = n = g \cdot s$ we would split them: $A = \{ A_1, \dots, A_g\}, B = \{B_1, \dots, B_g\}$.
+	Where each $|A_i| = |B_i| = s$.
+
+	Refined plan: represent $OV : \{0, 1\}^{2sd} \to \{0, 1\}$ as a prob. polynomial $p$  evaluate $p$ in $A_i, B_j, \forall 1 \leq i, j \leq g$.
+	Next fix s so that the last evaluation is possible(the number of monomials is small enough), on the one hand. On the other hand, the is should give the total running time $O(n^{2 - \frac{1}{O(\log c)}})$
+
+	$OV(A_i, B_j) : \{0, 1\}^{2sd} \to \{0, 1\}$.
+
+	{\color{red} рисунок :(}
+
+	\begin{align*}
+		OV(A_i, B_j) = \lor_{1 \leq p, q \leq s} Orth(a_p, b_q) \\
+		Orth(a_p, b_q) = \land_{l \in [d]} \neg a_p \lor \neg b_q
+	\end{align*}
+
+	Converting a Boolean function into a polynomial over $F_2$(Zhegalkin polynomial, it is known that every Boolean function has a unique representation as Zhegalkin polynomial)
+
+	Assume that we have $z_1, \dots, z_t \in F_2$, so
+
+	\begin{align*}
+		z_1 \land \dots \land z_t \to z_1 \cdot \dots \cdot z_t \\
+		\neg z_i \to 1 \oplus z_i \\
+		z_1 \lor \dots \lor z_t = \neg (\neq z_1 \land \dots \land \neg z_t) \to 1 \oplus (1 \oplus z_1) \cdot \dots \cdot (1 \oplus z_t)
+	\end{align*}
+
+	\begin{align*}
+		P(A_i, B_j) = 1 \oplus \prod_{1 \leq p, q \leq s} (1 \oplus Q(a_p, b_q))\\
+		Q(a_p, b_q) = \prod_{l \in [d]} (1 \oplus (1 \oplus \neg a_p[l]) \cdot (1 \oplus \neg b_q[l]))
+	\end{align*}
+
+	Recall that we would like $P$ to have a few monomials.
+	Unfortunately $P$ has many monomials: already $Q(a_p, b_q)$ has about $2^{d}$ monomials.
+
+	To overcome this difficulty, we will work with probabilistic polynomials.
+
+	\begin{df}[Probabilistic Polynomial]
+
+		Let $r_1, \dots r_t$ be random bits(independent and uniform).
+
+		A probabilistic polynomial $p$ is a polynomial whose coefficients depend on random bits.
+	\end{df}
+
+	\begin{exmpl}
+		$r$ is a single random bit
+
+		$r x_1 \oplus (1 \oplus r) x_1 x_2$ - probabilistic polynomial.
+
+		In fact it is equal to $x_1 x_2$ if $r = 0$, otherwise it is equal to $x_1$.
+	\end{exmpl}
+
+	\begin{df}
+
+		$f:\{0, 1\}^{n} \to \{0, 1\}, p(x_1, \dots, x_n)$  - probabilistic polynomial.
+
+		We write $f \approx_\alpha p,$ if for any $x \in \{0, 1\}^{n}$, if $Pr_r[f(x) \neq p(x)] \leq \alpha$
+
+	\end{df}
+
+	\begin{lm}[Razborov; Smolensky, 1987]
+
+		Informally: one can trade-off between degree and probability of error.
+
+		Formally: for any $t \in Z_{\geq 1}$
+
+		\begin{align*}
+			\land_{i \in [n]} x_i \approx_{2^{-t}} \underbrace{\prod_{j \in [t]}(1 \oplus \bigoplus_{i \in [n]} r_{i j} \cdot (1 \oplus x_i))}_{\text{degree = } t, t \cdot n \text{ random bits }}
+		\end{align*}
+
+		\begin{proof}
+			if $x_1 = \dots = x_n = 1$: in this case $\land x_i = 1 = \prod_{j \in [t]}$.
+
+			In that case $Pr_r[\land x_i = \prod_{j \in [t]} = 1]$(zero error probability)
+
+			Now, assume that $\land x_i = 0$(fixed).
+			Let's define $Z = \{ i \in [n]: x_i = 0 \} \subseteq [n]$.
+			And $Z$ is not empty.
+
+			\begin{align*}
+				\prod_{j \in [t]}(1 \oplus \bigoplus_{i \in [n]} r_{i j} \cdot (1 \oplus x_i)) = \\
+				\prod_{j \in [t]}(1 \oplus \bigoplus_{i \in Z} r_{i j})
+			\end{align*}
+
+			\begin{align*}
+				Pr_r[(1 \bigoplus_{i \in Z} r_{i j}) = 1] = Pr_r[\bigoplus_{i \in Z} r_{i j} = 0] = \frac{1}{2}\\
+				Pr_r[\prod_{j \in [t]}(1 \oplus \bigoplus_{i \in Z}r_{i j})] = 1]=\frac{1}{2^{t}}
+			\end{align*}
+		\end{proof}
+
+		So now we can construct degree $t$ polynomial with a lot of monomials.
+
+		RS Lemma tells that there exists a probabilistic polynomial of small degree that agrees with $\land x_i$ with high probability. Note that small degree implies small number of monomials.
+		At least over $F_2$ each monomial is a subset of $[n]$, so if a degree of $p \leq d \Rightarrow$ number of monomials is at most $d \cdot n^{d}$     {\color{red} ссылку на лемму сделать}
+
+		Introduce polynomial from RS lemma as $RS_t(x_1, \dots, x_n)$.
+
+		Now we are going to convert OV Boolean function to a probabilistic polynomial.
+		{\color{red} ну ссылочку сделать на нужную часть, конвертим OV и Orth}
+
+		$Orth(a_p, b_q) \to RS_{3 \log s}(a_p, b_q)$ where $\neg a_p[l] \lor \neg b_q[l] = 1 \oplus a_p[l] \cdot b_q[l] = F(a_p, b_q)$
+
+		$OV(A_i, B_j) \to 1 \oplus RS_2(1 \oplus F(a_1, b_1), \dots, 1 \oplus F(a_s, b_s)) = E(A_i, B_j)$ - final polynomial
+
+		\begin{lm}
+
+			Assume that $s \geq 12$, then for any $A_i, B_j \in \{0, 1\}^{sd}$
+
+			\begin{align*}
+				Pr_r[OV(A_i, B_j) \neq E(A_i, B_j)] \leq \frac{1}{3}
+			\end{align*}
+
+		\end{lm}
+
+		\begin{proof}
+			\begin{align*}
+				Pr[OV(A_i, B_j) \neq E(A_i, B_j)] \leq \\ Pr[\text{for some }1 \leq p, q \leq s, F(a_p, b_q) \neq Orth(a_p, b_q)] + \text{error probability for $RS_2$ } \leq \\ s^2 \cdot \frac{1}{s^3} + \frac{1}{4} = \frac{1}{s} + \frac{1}{4} \leq \frac{1}{3} \Leftrightarrow s \geq 12
+			\end{align*}
+		\end{proof}
+
+
+
+	\end{lm}
+
+
+	During the next lecture we will fix $s$ and estimate the running time($n^{2-\frac{1}{O(\log c)}}$ ).
+
+	Running time: $O(g^2), g=\frac{n}{s}$ {\color{red} О с волной надо} and number of monomials = $O(g^{\frac{1}{10}})$.
+
+
+\end{proof}
