@@ -5,40 +5,43 @@
 	Let $ c = c(c)$, consider OV with $d = c \log(n)$, OV can be solved in time $O(n^{2 - \frac{1}{O(\log c)}})$.
 \end{thm}
 
-\begin{prop*}
+\begin{remrk}
+	Assume that we have $p(x_1, \dots, x_n) \in F_2[x_1, \dots, x_n]$ - multilineal, because in every monomial, each variable has degree at most one. Because $x^2 = x \mod 2$
+\end{remrk}
+
+\begin{exmpl}
+	$x_1 x_2 \oplus x_1 x_2 x_3 \oplus x_4 x_2 \oplus 1$
+\end{exmpl}
+
+
+\begin{crly*}
 	if $d \leq 100 \log n$, then OV $\in$ TIME$[n^{2-\varepsilon}]$ for some $\varepsilon > 0$
-\end{prop*}
+\end{crly*}
 
 \begin{proof}
 	Plan:
-	\begin{itemize}
+	\begin{enumerate}
 		\item Treat OV as a Boolean function of the folowing form: $A, B \subseteq \{0, 1\}^d, |A| = |B| = n$.
 			$OV : \{0, 1\}^{2nd} \to \{0, 1\}$.
+
 			$OV(A, B) = 1 \Longleftrightarrow (A, B)$ is a yes instance ($\exists a \in A, b \in B : a \cdot b = 0$).
 
 		\item Represent OV as a probabilistic polynomial with a few monomials.
 		\item Show that we can quickly evaluate this polynomial
-	\end{itemize}
+	\end{enumerate}
 
 	Let's start from a second point.
 
-	\begin{remrk}
-		Assume that we have $p(x_1, \dots, x_n) \in F_2[x_1, \dots, x_n]$ - multilineal, because in every monomial, each variable has degree at most one. Because $x^2 = x \mod 2$
-	\end{remrk}
-
-	\begin{exmpl}
-		$x_1 x_2 \oplus x_1 x_2 x_3 \oplus x_4 x_2 \oplus 1$
-	\end{exmpl}
 
 	\begin{lm}
 		Consider $p(x_1, \dots, x_{2k})$ over $F_2$ with $m$ monomials.
 
 		Assume $A_1, \dots, A_g$ and $B_1, \dots, B_g \in F_2^k$.
-		If $k, m = O(g^{\frac{1}{10}})$ then one can evaluate $P(A_i, B_j) \ \forall 1 \leq i, j \leq g$ in time $O(g^2 \log^2g)$ = $\widetilde{O}(g^2)$
+		If $k, m = O(g^{\frac{1}{10}})$ then one can evaluate $P(A_i, B_j) ,\ \forall 1 \leq i, j \leq g$ in time $O(g^2 \log^2g)$ = $\widetilde{O}(g^2)$
 	\end{lm}
 
 	\begin{proof}
-		Naive algorithm: $O(g^2 \cdot m \cdot k)$
+		Naive algorithm: $O(g^2 \cdot m \cdot k)$ -- to slow for us.
 
 		\begin{remrk*}
 			Resembles FFT: you can evaluate a polynomial $P$ of degree $n$ in $n$ points $A_1, \dots, A_n$ in time $O(n \log n)$ if $A_1, \dots, A_n$ are selected carefully(roots of unity)
@@ -48,7 +51,7 @@
 
 		Black box:
 		\begin{thm}[Coopersmith, 198?]
-			Let $A \in F^{n \times m}$ and $B \in F^{n \times m}$.
+			Let $A \in F^{n \times m}$ and $B \in F^{m \times n}$.
 
 			If $m = O(n^{\frac{1}{10}})$ then one can compute $A \times B$ in time $O(n^2 \log ^{O(1)} n)$
 
@@ -57,7 +60,7 @@
 
 		We will use that black box without proof.
 
-		Assume $p(x_1, \dots x_{2k}) = \bigoplus_{i \in [m]} x_1^{\alpha_{i_1}} \cdot x_2^{\alpha_{i_2}} \dots \cdot x_{2k}^{\alpha_{i_{2k}}}$ and $\alpha_{i j} \in {0, 1}$
+		Assume $p(x_1, \dots ,x_{2k}) = \bigoplus_{i \in [m]} x_1^{\alpha_{i_1}} \cdot x_2^{\alpha_{i_2}} \dots \cdot x_{2k}^{\alpha_{i_{2k}}}$ and $\alpha_{i j} \in \{0, 1\}$
 
 		{\color{red} Рисуночек с точками}
 
@@ -67,19 +70,19 @@
 		\]
 		{\color{red} а сюда рисунок}
 
-		We contruct matrix $\A, \B$ such that $\A[i, l] = A_{i 1}^{\alpha_{l 1}} \cdot \dots \cdot A_{i k}^{\alpha_{l k}}$ and similar for $\B[l, j] = B_{j 1}^{\alpha_{l k + 1}} \cdot \dots \cdot B_{j k}^{\alpha_{l 2k}}$
+		We contruct matrix $\A, \B$ such that $\A[i, l] = A_{i 1}^{\alpha_{l 1}} \cdot \dots \cdot A_{i k}^{\alpha_{l k}}$ and similar for $\B[l, j] = B_{j 1}^{\alpha_{l k + 1}} \cdot \dots \cdot B_{j k}^{\alpha_{l 2k}}$, $\Rightarrow \A \in F_2^{g \times m}, \B \in F_2^{m \times g}$
 
 		Now $P(A_i, B_j) = (\A \times \B)[i, j]$. Because $m = O(g^{\frac{1}{10}})$ it means that we can use our black box and proof will be finished.
 	\end{proof}
 
-	Now we will represent OV as a Boolean function.
+	Now we will represent OV as a Boolean function(point 1).
 
 	OV: $\{0, 1\}^{2nd} \to \{0, 1\}$(OV$(A, B) = 1 \Leftrightarrow \exists a \in A, b \in B : a \cdot b = 0 )$
 
 	$|A| = |B| = n = g \cdot s$ we would split them: $A = \{ A_1, \dots, A_g\}, B = \{B_1, \dots, B_g\}$.
-	Where each $|A_i| = |B_i| = s$.
+	Where each $|A_i| = |B_j| = s$.
 
-	Refined plan: represent $OV : \{0, 1\}^{2sd} \to \{0, 1\}$ as a prob. polynomial $p$  evaluate $p$ in $A_i, B_j, \forall 1 \leq i, j \leq g$.
+	Refined plan: represent $OV : \{0, 1\}^{2sd} \to \{0, 1\}$ as a prob. polynomial $p$,  evaluate $p$ in $A_i, B_j, \forall 1 \leq i, j \leq g$.
 	Next fix s so that the last evaluation is possible(the number of monomials is small enough), on the one hand. On the other hand, the is should give the total running time $O(n^{2 - \frac{1}{O(\log c)}})$
 
 	$OV(A_i, B_j) : \{0, 1\}^{2sd} \to \{0, 1\}$.
@@ -87,8 +90,8 @@
 	{\color{red} рисунок :(}
 
 	\begin{align*}
-		OV(A_i, B_j) = \lor_{1 \leq p, q \leq s} Orth(a_p, b_q) \\
-		Orth(a_p, b_q) = \land_{l \in [d]} \neg a_p \lor \neg b_q
+		OV(A_i, B_j) = \bigvee_{1 \leq p, q \leq s} Orth(a_p, b_q) \\
+		Orth(a_p, b_q) = \bigwedge_{l \in [d]} \left(\overline a_p \lor \overline b_q\right)
 	\end{align*}
 
 	Converting a Boolean function into a polynomial over $F_2$(Zhegalkin polynomial, it is known that every Boolean function has a unique representation as Zhegalkin polynomial)
@@ -96,14 +99,14 @@
 	Assume that we have $z_1, \dots, z_t \in F_2$, so
 
 	\begin{align*}
-		z_1 \land \dots \land z_t \to z_1 \cdot \dots \cdot z_t \\
-		\neg z_i \to 1 \oplus z_i \\
-		z_1 \lor \dots \lor z_t = \neg (\neq z_1 \land \dots \land \neg z_t) \to 1 \oplus (1 \oplus z_1) \cdot \dots \cdot (1 \oplus z_t)
+		&z_1 \land \dots \land z_t \to z_1 \cdot \dots \cdot z_t \\
+		&\overline z_i \to 1 \oplus z_i \\
+		&z_1 \lor \dots \lor z_t = \overline{(\overline z_1 \land \dots \land \overline z_t)} \to 1 \oplus (1 \oplus z_1) \cdot \dots \cdot (1 \oplus z_t)
 	\end{align*}
 
 	\begin{align*}
 		P(A_i, B_j) = 1 \oplus \prod_{1 \leq p, q \leq s} (1 \oplus Q(a_p, b_q))\\
-		Q(a_p, b_q) = \prod_{l \in [d]} (1 \oplus (1 \oplus \neg a_p[l]) \cdot (1 \oplus \neg b_q[l]))
+		Q(a_p, b_q) = \prod_{l \in [d]} (1 \oplus (1 \oplus \overline{a_p[l]}) \cdot (1 \oplus \overline {b_q[l]})) = \prod_{l \in [d]} (1 \oplus (1 \oplus a_p[l] \cdot b_q[l]))
 	\end{align*}
 
 	Recall that we would like $P$ to have a few monomials.
