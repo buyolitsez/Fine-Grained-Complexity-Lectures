@@ -1,0 +1,35 @@
+\section{7. The polynomial method for Orthogonal Vectors (Continued)}
+
+We constructed a probabilistic polynomial $E$ such that for any $A_i, B_j \in \{ 0, 1\}^{sd}$,
+
+In order to evaluate $E$ fast we need to make
+
+Every monomial of $F(a_p, b_q)$ corresponds to a subset of $[d]$ of size $\leq 3 \log s$.
+Thus the number of monomials is at most 
+
+\begin{align*}
+	\sum_{r = 0}^{3 \log s} \binom{d}{r} \leq 3 \log s \binom{d} {3 \log s} = O\left(s \binom{d}{3 \log s}\right)
+\end{align*}
+
+We assuming $3 \log s \leq \frac{d}{2}$, we will set $s = n^{\frac{\varepsilon}{\log c}}$, so $3 \frac{\varepsilon}{\log c} \log n \leq \frac{c}{2} \log n$.
+
+We will choose such $\varepsilon$.
+
+{\color{red}.................}
+
+\begin{align*}
+	\frac{6\varepsilon}{\log c} (1 + 2 \log c + \log{\frac{1}{\varepsilon}}) \leq \frac{1}{10}(1 - \frac{\varepsilon}{\log c})
+\end{align*}
+
+Assuming $c \geq 2$, the lsh $\to 0$ as $\varepsilon \to 0$ whereas the rhs $\to \frac{1}{10}$ as $\varepsilon \to 0$ 
+
+Two final technical things:
+
+{\color{red} .............}
+
+By Chernov inequality, $Pr[res_{i j} \neq OV(A_i, B_j)] \leq e^{-\alpha t}$.
+If $t = 3c \cdot \log n \Rightarrow$ probability is smaller than $\frac{1}{n^3}$ 
+
+Now we are ready to finish our proof.
+
+{\color{blue} Мы тут оцениваем что $i j$ результат не сойдется, но в конце мы ведь берем от них $\bigvee$, на что то же должно это влиять}

@@ -1,0 +1,25 @@
+\section{4. (Strong) Exponential Time Hypothesis}
+
+{\color{red}....}
+
+\begin{lm}[Sparsification Lemma] $\\$ 
+
+	Input: $\eps > 0, F \text{is a } k\text{-CNF}, k \geq 3 (k = O(1))$ 
+
+	Outputs: $F_1, \dots, F_t - k$-CNFs:
+
+	\begin{itemize}
+		\item running time $\leq 2^{\eps \cdot n} \Rightarrow t \leq 2^{\eps \cdot n}$
+		\item $F \in \text{SAT} \Leftrightarrow$ at least one of $F_i \in $ SAT(satisfiable)
+		\item $\forall i \in [t]$, the number of clauses of $F_i$ is $O(n)$(n \cdot \left(\frac{k }{\eps }\right)^{O(k)}$ to be more precisly)
+		\item $\forall i \in [t], \ F_i$ has the same $n$ variables
+		\item In fact, each variable is in at most $poly(\frac{1}{\eps})$ clauses, and the $F_i$ are over the same variables as $F$.  
+	\end{itemize}
+
+\end{lm}
+
+\begin{proof}
+	We will prove it later, if time permits.
+\end{proof}
+
+{\color{red}....}

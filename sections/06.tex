@@ -2,7 +2,7 @@
 \section{6. The polynomial method for Orthogonal Vectors}
 
 \begin{thm}[Abboud, Williams, Yu, 2015]
-	Let $ c = c(c)$, consider OV with $d = c \log(n)$, OV can be solved in time $O(n^{2 - \frac{1}{O(\log c)}})$.
+	Let $ c = c(n)$, consider OV with $d = c \log(n)$, OV can be solved in time $O(n^{2 - \frac{1}{O(\log c)}})$.
 \end{thm}
 
 \begin{remrk}
@@ -30,7 +30,7 @@
 		\item Show that we can quickly evaluate this polynomial
 	\end{enumerate}
 
-	Let's start from a second point.
+	Let's start from the second point.
 
 
 	\begin{lm}
@@ -53,9 +53,9 @@
 		\begin{thm}[Coopersmith, 198?]
 			Let $A \in F^{n \times m}$ and $B \in F^{m \times n}$.
 
-			If $m = O(n^{\frac{1}{10}})$ then one can compute $A \times B$ in time $O(n^2 \log ^{O(1)} n)$
+			If $m = O(n^{0.172})$ then one can compute $A \times B$ in time $O(n^2 \log ^{2} n)$
 
-			Naively: $O(n \cdot m \cdot n) = O(n^{2.1})$
+			Naively: $O(n \cdot m \cdot n) = O(n^{2.172})$
 		\end{thm}
 
 		We will use that black box without proof.
@@ -91,7 +91,7 @@
 
 	\begin{align*}
 		OV(A_i, B_j) = \bigvee_{1 \leq p, q \leq s} Orth(a_p, b_q) \\
-		Orth(a_p, b_q) = \bigwedge_{l \in [d]} \left(\overline a_p \lor \overline b_q\right)
+		Orth(a_p, b_q) = \bigwedge_{l \in [d]} \left(\overline {a_p[l]} \lor \overline {b_q[l]}\right)
 	\end{align*}
 
 	Converting a Boolean function into a polynomial over $F_2$(Zhegalkin polynomial, it is known that every Boolean function has a unique representation as Zhegalkin polynomial)
@@ -106,7 +106,7 @@
 
 	\begin{align*}
 		P(A_i, B_j) = 1 \oplus \prod_{1 \leq p, q \leq s} (1 \oplus Q(a_p, b_q))\\
-		Q(a_p, b_q) = \prod_{l \in [d]} (1 \oplus (1 \oplus \overline{a_p[l]}) \cdot (1 \oplus \overline {b_q[l]})) = \prod_{l \in [d]} (1 \oplus (1 \oplus a_p[l] \cdot b_q[l]))
+		Q(a_p, b_q) = \prod_{l \in [d]} (1 \oplus (1 \oplus \overline{a_p[l]}) \cdot (1 \oplus \overline {b_q[l]})) = \prod_{l \in [d]} (1 \oplus a_p[l] \cdot b_q[l]))
 	\end{align*}
 
 	Recall that we would like $P$ to have a few monomials.
@@ -118,7 +118,7 @@
 
 		Let $r_1, \dots r_t$ be random bits(independent and uniform).
 
-		A probabilistic polynomial $p$ is a polynomial whose coefficients depend on random bits.
+		A probabilistic polynomial $p$ is a polynomial whose coefficients depend on it's random bits.
 	\end{df}
 
 	\begin{exmpl}
@@ -133,7 +133,7 @@
 
 		$f:\{0, 1\}^{n} \to \{0, 1\}, p(x_1, \dots, x_n)$  - probabilistic polynomial.
 
-		We write $f \approx_\alpha p,$ if for any $x \in \{0, 1\}^{n}$, if $Pr_r[f(x) \neq p(x)] \leq \alpha$
+		We write $f \approx_\alpha p,$ if for any $x \in \{0, 1\}^{n}$, $Pr_r[f(x) \neq p(x)] \leq \alpha$
 
 	\end{df}
 
@@ -144,7 +144,7 @@
 		Formally: for any $t \in Z_{\geq 1}$
 
 		\begin{align*}
-			\land_{i \in [n]} x_i \approx_{2^{-t}} \underbrace{\prod_{j \in [t]}(1 \oplus \bigoplus_{i \in [n]} r_{i j} \cdot (1 \oplus x_i))}_{\text{degree = } t, t \cdot n \text{ random bits }}
+			\bigwedge_{i \in [n]} x_i \approx_{2^{-t}} \underbrace{\prod_{j \in [t]}(1 \oplus \bigoplus_{i \in [n]} r_{i j} \cdot (1 \oplus x_i))}_{\text{degree = } t, \ t \cdot n \text{ random bits }} = RS_t(x_1, \dots, x_n)
 		\end{align*}
 
 		\begin{proof}
@@ -157,8 +157,7 @@
 			And $Z$ is not empty.
 
 			\begin{align*}
-				\prod_{j \in [t]}(1 \oplus \bigoplus_{i \in [n]} r_{i j} \cdot (1 \oplus x_i)) = \\
-				\prod_{j \in [t]}(1 \oplus \bigoplus_{i \in Z} r_{i j})
+				\prod_{j \in [t]}\left(1 \oplus \bigoplus_{i \in [n]} r_{i j} \cdot (1 \oplus x_i)\right)= \prod_{j \in [t]}(1 \oplus \bigoplus_{i \in Z} r_{i j})
 			\end{align*}
 
 			\begin{align*}
@@ -167,17 +166,15 @@
 			\end{align*}
 		\end{proof}
 
-		So now we can construct degree $t$ polynomial with a lot of monomials.
-
 		RS Lemma tells that there exists a probabilistic polynomial of small degree that agrees with $\land x_i$ with high probability. Note that small degree implies small number of monomials.
-		At least over $F_2$ each monomial is a subset of $[n]$, so if a degree of $p \leq d \Rightarrow$ number of monomials is at most $d \cdot n^{d}$     {\color{red} ссылку на лемму сделать}
+		At least over $F_2$ each monomial is a subset of $[n]$, so if $\deg(p) \leq d \Rightarrow$ number of monomials is at most $d \cdot n^{d}$     {\color{red} ссылку на лемму сделать}
 
 		Introduce polynomial from RS lemma as $RS_t(x_1, \dots, x_n)$.
 
 		Now we are going to convert OV Boolean function to a probabilistic polynomial.
 		{\color{red} ну ссылочку сделать на нужную часть, конвертим OV и Orth}
 
-		$Orth(a_p, b_q) \to RS_{3 \log s}(a_p, b_q)$ where $\neg a_p[l] \lor \neg b_q[l] = 1 \oplus a_p[l] \cdot b_q[l] = F(a_p, b_q)$
+		$Orth(a_p, b_q) \to RS_{3 \log s}(a_p, b_q) = F(a_p, b_q)$ where $\overline{a_p[l]} \lor \overline{b_q[l]} = 1 \oplus a_p[l] \cdot b_q[l]$
 
 		$OV(A_i, B_j) \to 1 \oplus RS_2(1 \oplus F(a_1, b_1), \dots, 1 \oplus F(a_s, b_s)) = E(A_i, B_j)$ - final polynomial
 
@@ -204,7 +201,7 @@
 
 	During the next lecture we will fix $s$ and estimate the running time($n^{2-\frac{1}{O(\log c)}}$ ).
 
-	Running time: $O(g^2), g=\frac{n}{s}$ {\color{red} О с волной надо} and number of monomials = $O(g^{\frac{1}{10}})$.
+	Running time: $\widetilde{O}(g^2), g=\frac{n}{s}$ and number of monomials = $O(g^{\frac{1}{10}})$.
 
 
 \end{proof}
