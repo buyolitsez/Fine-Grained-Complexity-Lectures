@@ -1,0 +1,231 @@
+\section{The k-SUM problem}
+
+\begin{df}
+	Input: a set $S$ of $n$ integers.
+
+	Output: whether there exist pairwaise different $s_1, \ldots, s_k \in S$ such that $s_1 + \ldots + s_k = 0$ 
+
+\end{df}
+
+\begin{remrk}
+
+\begin{itemize}
+	\item "set": $n$ integers are pairwaise distinct 
+	\item integers are of absolute value at $n^{O(1)}$ (hence, $O(\log n)$ bits, arithmetic operations with them take constant time
+	\item naive algorithm $O(n^k)$ 
+\end{itemize}	
+\end{remrk}
+
+\begin{thm}
+	2-SUM algorithm in time $O(n \log n)$ $(\Ot (n))$ 
+\end{thm}
+
+\begin{algorithm}
+	\begin{enumerate}
+		\item Sort $S$, then for every $s \in S$ binary search $S $ for $-S $ 
+		\item Two pointer method $O(n \log n)$ 
+	\end{enumerate}
+\end{algorithm}
+
+	Sort $s[1\ldots n]$ \\	
+	l := 1, r := n \\
+	while $l < r$: \\
+	\ \ if $s[l] + s[r] = 0$: \\ 
+	\ \ \ \ return $(l, r)$ \\
+	\ \ else if $s[l] + s[r] > 0$: \\
+	\ \ \ \ $r = r - 1$ \\
+	\ \ else if $s[l] + s[r] < 0$: \\
+	\ \ \ \ $l = l + 1$  \\
+	return <<No>>
+
+	\begin{lm}
+		$k-SUM_n$ can be reduced in time $O(n^2)$ to n instances of $(k - 1)-SUM_{n - 1}$ 
+	\end{lm}
+
+	\begin{proof}
+		{\color{red} Add picture}
+
+		\begin{align*}
+			S_i = \{(k - 1)s_1 + s_i, (k - 1)s_2 + s_i, \ldots, (k - 1)s_n + s_i \}
+		\end{align*}
+
+		$s_{i_1}, \ldots, s_{i_k} \in S: s_{i_1} + \ldots + s_{i_k} = 0 \implies S_i $ has a $(k - 1)-SUM$ solution.
+
+		\begin{align*}
+			(k - 1)s_{i_2} + s_{i_1} + \ldots + (k - 1)s_{i_k} = (k - 1)(s_{i_1} + \ldots + s_{i_k})
+		\end{align*}
+	\end{proof}
+
+	\begin{crly}
+		$3-SUM \in TIME[n^2 \log n]$ 
+	\end{crly}
+
+	\begin{proof}
+		sort S, then 
+		for all $s \in S$ do two pointers algorithm in $O(n^2)$ time.
+	\end{proof}
+	
+	{\color{red} it is not a theorem bellow}
+	\begin{thm}[3-SUM conjecture]
+		$\forall \eps > 0 3-SUM \notin TIME[n^{2 - \eps}]$ 
+	\end{thm}
+
+\subsection{Variants of 3-SUM}
+
+\begin{itemize}
+	\item 3-SUM: set $S, \exists ? s_1, s_2, s_3 : s_1 + s_2 + s_3 = 0$ (decision)
+	\item 3-SUM Finding: set $S$ find $s_1, s_2, s_3 \in S$ (search)
+	\item Colorful 3-SUM: sets $S_1, S_2, S_3, \exists ? s_1 \in S_1, s_2 \in S_2, s_3 \in S_3: s_1 + s_2 + s_3 = 0$ 
+	\item 3-SUM with small integers: set $S \subset [-n^{3.1}, n^{3.1}], \exists? s_1, s_2, s_3 \in S$  
+	\item 3-SUM with duplications: set $S$ $\exists ? s_1, s_2, s_3 \in S: s_1 + s_2 + s_3 = 0$, not neccesarily pairwise distinct.
+	\item Target 3-SUM: set $S$ and a target $t \in \Z$ $\exists ? s_1, s_2, s_3 \in S: s_1 + s_2 + s_3 = t$ 
+	\item 3-SUM' set $S $ $\exists ? s_1, s_2, s_3 \in S: s_1 + s_2 = s_3$ 
+	\item Colorful 3-SUM' 
+
+\end{itemize}
+
+{\color{red} add diagram}
+
+\begin{itemize}
+	\item 3-SUM $\to$ 3-SUM finding (trivial reduction)
+	\item 3-SUM finding $\to$ 3-SUM (Lemma 1 bellow)
+			
+	\item 3-SUM with duplicates $\to$ Colorful 3-SUM (Copy 3 times)
+	\item Colorful 3-SUM $\to$ 3-SUM with duplicates (prove in Lemma 2 bellow)
+
+	\item Colorful 3-SUM $\to$ 3-SUM (Lemma 2 bellow)
+	\item 3-SUM $\to$ Colorful 3-SUM (Lemma 3 bellow)
+
+	\item 3-SUM with small integers $\to$ 3-SUM (trivial reduction)
+	\item 3-SUM $\to$ 3-SUM with small integers (Lemma 4 bellow)
+
+	\item 3-SUM with target $\to$ 3-SUM (Lemma 5 bellow)
+	\item 3-SUM $\to$ 3-SUM target (trivial reduction)
+
+	\item Colorful 3-SUM' $\longleftrightarrow$ Colorful 3-SUM ($S_3 = -S_3$)
+
+	\item 3-SUM' $\to$ Colorful 3-SUM' (Lemma 3 bellow)
+	\item Colorful 3-SUM' $\to$ 3-SUM' (Lemma 6 bellow)
+\end{itemize}
+
+\begin{lm}
+	3-SUM Finding $\to$ 3-SUM.
+
+	if $3-SUM \in T(n) \implies 3-SUM Finding \in \Ot(T(N))$ 
+\end{lm}
+
+\begin{proof}
+	Split $S $ into 4 arrays $(S_1, S_2, S_3, S_4)$  of size $\frac{n}{4}$ 
+	
+	$F(n) \le 4 T(n) + F(\frac{3n}{4}) \le 4 T(n) + 4T(\frac{3n}{4}) + F((\frac{3}{4})^2 n) \le \ldots \le O(T(n) \log n)$
+\end{proof}
+
+\begin{lm}
+	Colorful 3-SUM $\to$ 3-SUM (with duplicates): 
+
+	if $3-SUM \in T(n) \implies \text{Colorful 3-SUM} \in T(n)$ 
+\end{lm}
+
+\begin{proof}
+	{\color{red} Add picture}
+	$S_1, S_2, S_3 \in [-M, M]$ 
+	
+	$S_1 + 10M \mid S_2 + 30M \mid S_3 - 40M$ 
+\end{proof}
+
+\begin{lm}
+	3-SUM $\to$ Colorful 3-SUM: 
+
+	if Colorful 3-SUM $\in T(n) \implies \text{3-SUM} \in \Ot(T(n))$ 
+\end{lm}
+
+\begin{proof}
+	S-instance of 3-SUM.
+
+	{\color{red} add picture}
+
+	Create 3 copies of the set. $S_1 = S_2 = S_3 = S$ And put the solutuion to <<3-SAT black box>>. Get the answer <<yes>>/<<no>>.
+
+	if <<yes>>, it could be done with duplicates. To avoid this, we will use \textbf{color coding}:
+
+	Take an original array and assign a color to each element randomly and check <<yes>>/<<no>>.
+	We will prove that probability of correct answer is good enough.
+
+	Repeat this algorithm $\alpha \log n$ times:
+	\begin{itemize}
+		\item for each $s \in S$ $color[s] = random(1 \ldots 3)$ 
+		\item $S = S_1 \sqcup S_2 \sqcup S_3: \ S_i = \{s \in S \mid color(s) = i\}$
+		\item solve via black box for $(S_1, S_2, S_3)$ 
+	\end{itemize}
+	\begin{align*}
+		Pr[\text{error of a single error}] \le \\ \le Pr[s_1, s_2, s_3 \in S \mid s_1 + s_2 + s_3 = 0, \{s_1, s_2, s_3\} \text{is not colorful}] \le \\ \le \dfrac{6}{3^3} = \dfrac{6}{27} = \dfrac{2}{9}
+	\end{align*}
+\end{proof}
+
+\begin{lm}
+	3-SUM $\to$ 3-SUM with small integers:
+
+	if $\text{3-SUM with small integers} \in T(n) \implies \text{3-SUM}\text{ is }\Ot(T(n))$ 
+
+
+\end{lm}
+
+\begin{proof}
+	$S \to \{h(s) \mid s \in S\} = S'$ 
+
+	$h(s) = s \mod p$, where $p$~--- some small integer. 
+
+	$s_1 + s_2 + s_3 = 0, s_1, s_2, s_3 \in S \implies (s_1 \mod p) + (s_2 \mod p) + (s_3 \mod p) \in \{0, p, 2p\}$
+
+	$(s_1 \mod p) + (s_2 \mod p) + (s_3 \mod p) \in \{0, p, 2p\} \not\implies s_1 + s_2 + s_3 = 0$ 
+
+	
+	$(s_1 \mod p) + (s_2 \mod p) + (s_3 \mod p) \in \{0, p, 2p\} \implies s_1 + s_2 + s_3 \equiv 0 \mod p$ 
+	
+	Let $p$ be a random prime from $[2 \ldots n^{3.1}]$ 
+
+
+	Let's estimate the probability of an error.
+
+	$s_1, s_2, s_3 \in S: s_1 + s_2 + s_3 \ne 0 \land s_1 + s_2 + s_3 \equiv 0 mod p$ 
+
+	\begin{align*}
+	Pr[(s_1, s_2, s_3) \text{ is a false positive}] \le \\
+	\le \dfrac{}{\frac{n^{3.1}}{\log n^{3.1}}}
+	\end{align*}
+
+	$0 < |t| \le 3 \cdot n^{3.1} \implies $ number of prime divisors of $t $ is at most $4 \log n$: if it had at least $4 \log n$ prime divisors, then $t $ would be at least $\underbrace{2 \cdot 3 \cdot 5 \cdot \ldots}_{4\log n} > 2 ^{4 \log n} = n^4$   
+
+	$Pr[\text{there is false negative}] \le \#triples \cdot Pr[\text{triple is a false negative}] \le n^3 \cdot \frac{O(\log n)}{n^{3.1}} \le \frac{O(\log n)}{n^{0.1}} < \frac{1}{3}$ 
+\end{proof}
+
+\begin{lm}
+	$\text{3-SAT with target} \to \text{3-SUM}$ 
+\end{lm}
+
+\begin{proof}
+	$S, t$ 
+
+	$S' = \{3s - t \mid s \in S\}$ 
+
+	$s_1, s_2, s_3 \in S, s_1 + s_2 + s_3 = t \implies (3s_1 - t) + (3s_2 - t) + (3s_3 - t) = 3(s_1 + s_2 + s_3) - 3t = 0$ 
+
+	The same for $\Leftarrow$ 
+\end{proof}
+
+\begin{lm}
+	Colorful 3-SUM' $\to $ 3-SUM'
+\end{lm}
+
+\begin{proof}
+	{\color{red} add picture}
+
+	$S_1, S_2, S_3 \subseteq (-M, M)$ 
+
+	$S_1' = S_1 - 5M \subseteq (-6M, -4M), \\
+	S_2' = S_2 + 13M \subseteq (12M, 14M), \\
+	S_3' = S_3 + 8M \subseteq (7M, 9M),\\
+	S' = S_1' \sqcup S_2' \sqcup S_3'$ 
+
+	$s_1 \in S_1, s_2 \in S_2, s_3 \in S_3, s_1 + s_2 = s_3 \implies s_1 - 5M \in S_1', s_2 + 13M \in S_2', s_3 + 8M \in S_3', (s_1 - 5M) + (s_2 + 13M) = s_3 + 8M$ 
+\end{proof}
