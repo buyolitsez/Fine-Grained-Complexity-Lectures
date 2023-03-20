@@ -27,16 +27,20 @@
 	\end{enumerate}
 \end{algorithm}
 
-Sort $s[1\ldots n]$ \\
-l := 1, r := n \\
-while $l < r$: \\
-\ \ if $s[l] + s[r] = 0$: \\
-\ \ \ \ return $(l, r)$ \\
-\ \ else if $s[l] + s[r] > 0$: \\
-\ \ \ \ $r = r - 1$ \\
-\ \ else if $s[l] + s[r] < 0$: \\
-\ \ \ \ $l = l + 1$  \\
+\begin{lstlisting}
+
+Sort $s[1\ldots n]$
+$l$ := 1,  $r$ := n 
+while $l < r$: 
+    if $s[l] + s[r] = 0$: 
+        return $(l, r)$ 
+    else if $s[l] + s[r] > 0$: 
+        $r = r - 1$ 
+    else if $s[l] + s[r] < 0$: 
+        $l = l + 1$  
 return <<No>>
+
+\end{lstlisting}
 
 \begin{lm}
 	$k-SUM_n$ can be reduced in time $O(n^2)$ to n instances of $(k - 1)-SUM_{n - 1}$
