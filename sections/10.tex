@@ -1,0 +1,204 @@
+\section{10. 3-SUM and computational geometry}
+
+\begin{lm}
+
+	Geom-Base:
+
+	Input: set of n points $S \subset \Z^2$ with $y$ coordinates $\in \{0,1,2\}$ 
+
+	Output: does there exist non horizontal line hitting 3 points.
+
+\end{lm}
+
+\begin{lm}
+	GemBase $\Leftrightarrow$ {\color{red} TODO}
+\end{lm}
+
+
+GeomBase':
+
+Input: set of n $\eps$-wide holes 
+
+Output: does there exist a line going throw this holes 
+
+
+Collinearity:
+
+Input: $n$ points 
+
+
+\begin{lm}
+	3-SUM $\Leftrightarrow$ Collinearity
+\end{lm}
+
+\begin{proof}
+	$S \to \{(x, x^3) \mid x \in S$
+
+		$(a, a^3), (b, b^3), (c, c^3)$~--- are collinear $\Leftrightarrow$ $\frac{b^3 - a^3}{b - a} = \frac{c^3 - a^3}{c - a}$
+
+		\begin{align*}
+			\Leftrightarrow (b - c) (b + c + a) = 0 \ (b \ne c) \Leftrightarrow b + c + a = 0
+		\end{align*}
+\end{proof}
+
+Concurrency:
+
+Input: n lines 
+
+Output: do three of this lines initersect in 1 point.
+
+\begin{lm}
+	Concurrency $\Leftrightarrow$ Collinearity
+\end{lm}
+
+\begin{proof}
+	Sketch:
+	Preserves point / line incidence.
+\end{proof}
+
+\begin{df}
+Separator:
+
+Input: $n$ segments
+
+Output: is there a line that separates $n $ segments into two non-emty sets (and without intersected any of them)
+
+\end{df}
+
+\begin{lm}
+	GeomBase' $\Leftrightarrow$ Separator
+\end{lm}
+
+\begin{proof}
+	{\color{red} Add picture}
+\end{proof}
+
+\begin{df}
+Visibiity between segments:
+
+Input: $n $ segments with two partialy segments $s_1, s_2$ 
+
+Output: is there a point on $s_1$ that <<sees>> some poinit on $s_2$
+
+\end{df}
+
+\begin{lm}
+	GemBase' $\to$ Visibiity between segments
+\end{lm}
+
+\begin{proof}
+	Add two segments above and below segments. And the only possible way to see bottom from the top is solution of GemBase solution.
+\end{proof}
+
+\begin{df}
+	
+Motion planning:
+
+Input: $n $ segments, starting position of a segment-shaped robot, target position.
+
+Output: whether it is possible to move the robot from its starting position to its target psition without touching $n $ objects (one is allowed to rotate the robot)
+
+\end{df}
+
+\begin{lm}
+	GeomBase' $\to$ Motion planning
+\end{lm}
+
+\begin{proof}
+	{color{red} add picture}
+	Add rooms above and bellow segments. And put in it a big segment's starting and target positions. And if length of the segment is big  enough. The only way to fing route for the robot is to solve GeomBase'
+\end{proof}
+
+\subsection{Decicion tree}
+
+\begin{df}
+	Sorting Decicion tree.
+
+	$a_1, a_2, a_3$ 
+
+	{\color{red} add picture}
+
+	\begin{itemize}
+		\item $a_1 < a_2?$
+			\begin{itemize}
+				\item yes: $a_2 < a_3?$ 
+					\begin{itemize}
+						\item yes: $a_1 < a_2 < a_3$
+						\item no: $a_1 < a_3$
+							\begin{itemize}
+								\item yes: $a_1 < a_3 < a_2$
+								\item no: $a_3 < a_1 < a_2$
+							\end{itemize}
+					\end{itemize}
+				\item no: .....
+			\end{itemize}
+	\end{itemize}
+
+	height \~ \#queries \~ running time
+\end{df}
+
+For sorting: 
+\begin{enumerate}
+	\item $\exists$ decicion three of height $O(n \log n)$ 
+	\item $\forall$ three has height $\Omega(n \log n)$
+\end{enumerate}
+$\Rightarrow$ the minimum height of decision three for sorting is $\Theta(n \log n)$ 
+
+\begin{df}
+	3-SUM conjecture: $\forall \eps > 0, 3-SUM \notin n^{2 - \eps}$
+\end{df}
+
+What is the decision tree complexity (minimum number os comarasions) of 3-SUM? 
+
+\begin{thm}[Gronlund, Pettie, 2014]
+	$\\$
+	the decision tree complexity of 3-SUM is $\Ot(n^{1.5})$ if every query is allowed to involve at most 4 numbers $(a + b \ ? \ c + d; \ a \ ? \ b + c)$.
+\end{thm}
+
+\begin{rm}
+	Just recently it was shown that $\Ot(n^{1.5})$ can be improves to $\Ot(n)$
+\end{rm}
+
+\begin{crly}
+	3-SUM can be solved in time $O\left( \frac{n^2}{\sqrt{\log n}} \right)$
+\end{crly}
+
+\begin{proof}
+	$\\$
+	\begin{itemize}
+		\item sort $S$ 
+		\item Introduce a segment $S$. Make a patition to buckets of size $\sqrt{n}$. Enumerate segments $S_1, S_2, \ldots, S_{\sqrt{n}}$
+		\item Then do a variant of 2 pointers method:
+	\end{itemize}
+
+	\begin{lstlisting}
+for every s <- S: 
+	l, r <- 1, sqrt(n) 
+	while $l \le r$:
+		if $ (-s) \in S_{l, r}$ : // $S = \{a + b \mid a \in S_l, b \in S_r\}$
+			return (s, a, b)
+		if $max(S_l) + min(S_r) + s > 0$:
+			r <- r - 1
+		else:
+			l <- l + 1 
+
+	\end{lstlisting}
+
+	Invariant: there are solution to 3-SUM involving $S$ and an element from $S_i$, where $i$ is from $[1, l) \cup (r, \sqrt{n}]$  
+
+	Correctness: if $(-s) \notin S_{l, r}$ and $max(S_l) + min(S_r) + s > 0$ then there is no solution of 2 form $(s, a, b)$ where $a $ or $b $ is from $S_r $ 
+
+	Assuming that $S$ is sorted $\Ot(n^{1.5})$ is enough.
+
+	Goal: preprocess $S$ so that for any $l, r $ we know the order of $S_{l, r} = \{a + b \mid a \in S_l, b \in S_r \} $
+
+	$a + b, a' + b' \in S_{l, r} \Leftrightarrow a, a' \in S_l, b, b' \in S_r$ 
+
+	$a + b \ge a' + b' \underbrace{\Leftrightarrow}_{\text{Fredman's trick}} a - a' \ge b' - b $
+
+	$S_i' = \{a - a', a \ne a' \in S_i \}$
+
+	$S' = \bigcup\limits_{i \in [\sqrt{n}]} S_i', \ |S'| = O(n^{1.5})$
+
+	We can sort $S'$ in $\Ot (n^{1.5})$ time 
+\end{proof}

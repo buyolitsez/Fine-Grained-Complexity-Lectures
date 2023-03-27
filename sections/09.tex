@@ -135,7 +135,7 @@ return "no"
 		Fix $s' \in S$ such that $s \neq s'$:
 
 		\begin{align*}
-		  Pr[s \mod p = s' \mod p] \leq \frac{\text{\# prime divisors}}{\text{\# primes}} \leq \frac{3\log n}{10 \cdot n \cdot \log^2 n / \ln(10 \cdot n \log^2 n)} \leq \frac{1}{3 n}
+		  Pr[s \ mod \ p = s' \ mod \ p] \leq \frac{\text{\# prime divisors}}{\text{\# primes}} \leq \frac{3\log n}{10 \cdot n \cdot \log^2 n / \ln(10 \cdot n \log^2 n)} \leq \frac{1}{3 n}
 		\end{align*}
 
 		That means for $s \in S$ the expected number of elements of $S$ that have the same hash value is $\frac{1}{3} \Longrightarrow Pr[s \text{ is } S\text{-bad}] \leq \frac{1}{30}$ by Markov's inequality.
