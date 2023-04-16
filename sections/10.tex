@@ -11,7 +11,7 @@
 \end{lm}
 
 \begin{lm}
-	GemBase $\Leftrightarrow$ {\color{red} TODO}
+	GeomBase $\Leftrightarrow$ {\color{red} TODO}
 \end{lm}
 
 
@@ -175,7 +175,7 @@ What is the decision tree complexity (minimum number os comarasions) of 3-SUM?
 for every s <- S: 
 	l, r <- 1, sqrt(n) 
 	while $l \le r$:
-		if $ (-s) \in S_{l, r}$ : // $S = \{a + b \mid a \in S_l, b \in S_r\}$
+		if $ (-s) \in S_{l, r}$ : // $S_{l, r} = \{a + b \mid a \in S_l, b \in S_r\}$
 			return (s, a, b)
 		if $max(S_l) + min(S_r) + s > 0$:
 			r <- r - 1
