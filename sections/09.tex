@@ -26,14 +26,15 @@
 
   Because integers of absolute value in $S_1, S_2, S_3$ not more than $n^3 \Longrightarrow |S_1'|, |S_2'|, |S_3'| \leq n^3$.
 
-  In gaps we put some large numbers, just to be sure that they are not contribute to any sum. See pic \eqref{fig:pc20_3sum_to_convolution}.
-
 \begin{figure}[ht]
     \centering
 	\incfig[0.7]{pc20_3sum_to_convolution}
     \caption{Example of $S_1'$ array }
     \label{fig:pc20_3sum_to_convolution}
 \end{figure}
+
+  In gaps we put some large numbers, just to be sure that they are not contribute to any sum. See pic \ref{fig:pc20_3sum_to_convolution}.
+
 
   Our idea is to use some hash function $h$ of $s$ instead of just $s$.
 
@@ -85,12 +86,6 @@ return "no"
 	\caption{Example of $S_r$ array}
   \end{figure}
 
-\begin{figure}[ht]
-    \centering
-    \incfig{pc20_3sum_to_convolution_sr}
-    \caption{pc20_3sum_to_convolution_sr}
-    \label{fig:pc20_3sum_to_convolution_sr}
-\end{figure}
 
   \begin{thm}
 	$Pr[\text{correct answer}] \geq 1 - \frac{1}{n}$ in point 3.
